@@ -32,6 +32,7 @@ export default function About() {
                 alt="Luxury living room"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 loading="lazy"
+                decoding="async"
               />
               {/* Yellow accent bar */}
               <div className="absolute bottom-0 left-0 w-1 h-full" style={{ backgroundColor: '#F7E600' }} />
