@@ -86,12 +86,9 @@ export default function Testimonials() {
                 </div>
               </div>
 
-              {/* Floating animation */}
-              <motion.div
-                className="absolute -top-2 -right-2 w-20 h-20 rounded-full pointer-events-none"
+              {/* Floating animation - CSS only, no JS */}
+              <div className="absolute -top-2 -right-2 w-20 h-20 rounded-full pointer-events-none animate-float"
                 style={{ background: 'radial-gradient(circle, rgba(247,230,0,0.05) 0%, transparent 70%)' }}
-                animate={{ y: [0, -8, 0], x: [0, 4, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
               />
             </motion.div>
           ))}
