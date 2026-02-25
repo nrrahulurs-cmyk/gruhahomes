@@ -1,34 +1,89 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Gruha Homes - Premium Architectural CSS */
+
+.app-root {
+  min-height: 100vh;
+  position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Smooth focus styling */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(247, 230, 0, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(247, 230, 0, 0.1);
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Select dropdown styling */
+select option {
+  background-color: #14141A;
+  color: #FAFAFA;
 }
 
-.App-link {
-    color: #61dafb;
+body.light-theme select option {
+  background-color: #FFFFFF;
+  color: #111827;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Map invert for dark mode */
+body.light-theme iframe[title="Gruha Homes Location"] {
+  filter: none !important;
+}
+
+/* Light theme overrides */
+body.light-theme .glass {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme section[style*="backgroundColor: var(--gruha-surface)"] {
+  background-color: #F3F4F6 !important;
+}
+
+/* Responsive video modal */
+@media (max-width: 768px) {
+  .fixed.z-\\[100\\] .max-w-4xl {
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* Custom animation for floating elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(247, 230, 0, 0.1); }
+  50% { box-shadow: 0 0 20px rgba(247, 230, 0, 0.2); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Ensure proper stacking */
+section {
+  position: relative;
+}
+
+/* Link underline animation */
+a.animated-link {
+  position: relative;
+}
+a.animated-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #F7E600;
+  transition: width 0.3s ease;
+}
+a.animated-link:hover::after {
+  width: 100%;
 }
