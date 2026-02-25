@@ -87,7 +87,7 @@ export default function Pricing() {
             <motion.div
               key={plan.name}
               data-testid={`pricing-card-${plan.name.toLowerCase()}`}
-              className={`relative p-8 transition-all duration-500 ${plan.highlighted ? 'md:-mt-4 md:mb-4' : ''}`}
+              className={`relative p-8 hover-lift-8 ${plan.highlighted ? 'md:-mt-4 md:mb-4' : ''}`}
               style={{
                 backgroundColor: plan.highlighted ? '#F7E600' : 'var(--gruha-elevated)',
                 border: plan.highlighted ? 'none' : '1px solid rgba(255,255,255,0.05)',
@@ -95,7 +95,6 @@ export default function Pricing() {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.15 }}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
             >
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-4 py-1 text-xs font-bold uppercase tracking-wider"

@@ -113,11 +113,10 @@ export default function Projects() {
               <motion.div
                 key={project.title}
                 data-testid={`project-card-${i}`}
-                className="break-inside-avoid group relative overflow-hidden cursor-pointer"
+                className="break-inside-avoid group relative overflow-hidden cursor-pointer hover-lift-5"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ y: -5 }}
               >
                 <div className={`relative overflow-hidden ${project.tall ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}>
                   <img

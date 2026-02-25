@@ -49,11 +49,10 @@ export default function Videos() {
             <motion.div
               key={video.id}
               data-testid={`video-card-${i}`}
-              className="group relative overflow-hidden cursor-pointer"
+              className="group relative overflow-hidden cursor-pointer hover-lift-5"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.15 }}
-              whileHover={{ y: -5 }}
               onClick={() => setActiveVideo(video.id)}
             >
               {/* Thumbnail */}
@@ -63,18 +62,18 @@ export default function Videos() {
                   alt={video.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(11,11,15,0.9) 0%, rgba(11,11,15,0.2) 50%)' }} />
                 
                 {/* Play button */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center group-hover:scale-110 hover-scale-play"
                     style={{ backgroundColor: '#F7E600' }}
-                    whileHover={{ scale: 1.15 }}
                   >
                     <Play size={24} color="#000" fill="#000" className="ml-1" />
-                  </motion.div>
+                  </div>
                 </div>
               </div>
 

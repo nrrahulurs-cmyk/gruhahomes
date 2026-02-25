@@ -35,7 +35,7 @@ function ServiceCard({ service, index, inView }) {
   return (
     <motion.div
       data-testid={`service-card-${index}`}
-      className="relative overflow-hidden group cursor-pointer h-[400px]"
+      className="relative overflow-hidden group cursor-pointer h-[400px] hover-lift-6"
       style={{
         backgroundColor: 'var(--gruha-surface)',
         border: '1px solid rgba(255,255,255,0.05)',
@@ -43,11 +43,10 @@ function ServiceCard({ service, index, inView }) {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.15 }}
-      whileHover={{ y: -6, transition: { duration: 0.3 } }}
     >
       {/* BG Image */}
       <div className="absolute inset-0">
-        <img src={service.image} alt={service.title} className="w-full h-full object-cover opacity-20 group-hover:opacity-40" style={{ transition: 'opacity 0.5s' }} loading="lazy" />
+        <img src={service.image} alt={service.title} className="w-full h-full object-cover opacity-20 group-hover:opacity-40" style={{ transition: 'opacity 0.5s' }} loading="lazy" decoding="async" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(11,11,15,0.95) 40%, transparent 100%)' }} />
       </div>
 

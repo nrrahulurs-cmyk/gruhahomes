@@ -55,11 +55,10 @@ export default function Testimonials() {
             <motion.div
               key={i}
               data-testid={`testimonial-card-${i}`}
-              className="relative p-8 glass glow-border group"
+              className="relative p-8 glass glow-border group hover-lift-4"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              whileHover={{ y: -4 }}
             >
               {/* Quote icon */}
               <Quote size={32} className="mb-4 opacity-20" style={{ color: '#F7E600' }} />
