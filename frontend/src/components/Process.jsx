@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { MessageSquare, FileText, HardHat, Ruler, Home as HomeIcon, Key } from 'lucide-react';
 
 const steps = [
@@ -14,12 +14,9 @@ const steps = [
 export default function Process() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start end', 'end start'] });
-  const lineWidth = useTransform(scrollYProgress, [0.1, 0.8], ['0%', '100%']);
 
   return (
-    <section id="process" ref={containerRef} className="relative py-24 md:py-32 overflow-hidden" data-testid="process-section">
+    <section id="process" className="relative py-24 md:py-32 overflow-hidden" data-testid="process-section">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
         <motion.div ref={ref} className="mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -34,11 +31,16 @@ export default function Process() {
           </h2>
         </motion.div>
 
-        {/* Horizontal scrolling timeline */}
         <div className="relative">
-          {/* Progress line */}
+          {/* Static line that fills on view */}
           <div className="hidden md:block absolute top-[60px] left-0 right-0 h-[2px]" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
-            <motion.div className="h-full" style={{ width: lineWidth, backgroundColor: '#F7E600' }} />
+            <motion.div
+              className="h-full"
+              style={{ backgroundColor: '#F7E600' }}
+              initial={{ width: '0%' }}
+              animate={inView ? { width: '100%' } : {}}
+              transition={{ duration: 1.5, ease: 'easeOut', delay: 0.3 }}
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
@@ -53,11 +55,10 @@ export default function Process() {
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
-                  {/* Step number circle */}
                   <div className="relative inline-flex items-center justify-center w-[120px] h-[120px] mx-auto md:mx-0 mb-6">
-                    <div className="absolute inset-0 rounded-full border-2 transition-colors duration-300"
+                    <div className="absolute inset-0 rounded-full border-2"
                       style={{ borderColor: 'rgba(255,255,255,0.05)' }} />
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300"
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: 'rgba(247,230,0,0.1)', border: '1px solid rgba(247,230,0,0.2)' }}>
                       <Icon size={24} color="#F7E600" />
                     </div>
