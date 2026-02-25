@@ -183,8 +183,9 @@ body.light-theme .glass {
   background: radial-gradient(circle, rgba(247, 230, 0, 0.03) 0%, transparent 70%);
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
-  will-change: left, top;
+  left: 0;
+  top: 0;
+  will-change: transform;
   contain: strict;
 }
 

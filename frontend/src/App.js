@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import "@/App.css";
 import Lenis from 'lenis';
 import LogoIntro from '@/components/LogoIntro';
@@ -15,6 +15,20 @@ import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ScrollProgress from '@/components/ScrollProgress';
+
+// React.memo prevents re-render cascade when theme changes
+const MemoHero = memo(Hero);
+const MemoAbout = memo(About);
+const MemoServices = memo(Services);
+const MemoProjects = memo(Projects);
+const MemoPricing = memo(Pricing);
+const MemoProcess = memo(Process);
+const MemoTeam = memo(Team);
+const MemoVideos = memo(Videos);
+const MemoTestimonials = memo(Testimonials);
+const MemoContact = memo(Contact);
+const MemoFooter = memo(Footer);
+const MemoScrollProgress = memo(ScrollProgress);
 
 function App() {
   const [introComplete, setIntroComplete] = useState(false);
@@ -63,8 +77,7 @@ function App() {
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(() => {
-          cursor.style.left = mx + 'px';
-          cursor.style.top = my + 'px';
+          cursor.style.transform = `translate3d(${mx - 125}px, ${my - 125}px, 0)`;
           ticking = false;
         });
       }
@@ -79,22 +92,22 @@ function App() {
 
       {theme === 'dark' && <div ref={cursorRef} className="cursor-glow hidden md:block" />}
 
-      {introComplete && <ScrollProgress />}
+      {introComplete && <MemoScrollProgress />}
       {introComplete && <Navbar theme={theme} toggleTheme={toggleTheme} />}
 
       {introComplete && (
         <main>
-          <Hero />
-          <About />
-          <Services />
-          <Projects />
-          <Pricing />
-          <Process />
-          <Team />
-          <Videos />
-          <Testimonials />
-          <Contact />
-          <Footer />
+          <MemoHero />
+          <MemoAbout />
+          <MemoServices />
+          <MemoProjects />
+          <MemoPricing />
+          <MemoProcess />
+          <MemoTeam />
+          <MemoVideos />
+          <MemoTestimonials />
+          <MemoContact />
+          <MemoFooter />
         </main>
       )}
     </div>

@@ -103,6 +103,23 @@ section {
   contain-intrinsic-size: auto 800px;
 }
 
+/* Performant hover lifts - pure CSS, zero JS overhead */
+.hover-lift-4 { transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+.hover-lift-4:hover { transform: translateY(-4px) !important; }
+
+.hover-lift-5 { transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+.hover-lift-5:hover { transform: translateY(-5px) !important; }
+
+.hover-lift-6 { transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+.hover-lift-6:hover { transform: translateY(-6px) !important; }
+
+.hover-lift-8 { transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+.hover-lift-8:hover { transform: translateY(-8px) !important; }
+
+/* Play button hover scale - CSS only */
+.hover-scale-play { transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); }
+.hover-scale-play:hover { transform: scale(1.15); }
+
 /* Link underline animation */
 a.animated-link {
   position: relative;
