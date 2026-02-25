@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowDown, Play } from 'lucide-react';
 
 const HERO_BG = "https://images.pexels.com/photos/16811460/pexels-photo-16811460.png?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
@@ -17,6 +17,8 @@ function Counter({ target, suffix }) {
   const started = useRef(false);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !started.current) {
         started.current = true;
@@ -35,7 +37,7 @@ function Counter({ target, suffix }) {
         }, duration / steps);
       }
     }, { threshold: 0.5 });
-    if (ref.current) observer.observe(ref.current);
+    observer.observe(el);
     return () => observer.disconnect();
   }, [target]);
 
@@ -43,63 +45,68 @@ function Counter({ target, suffix }) {
 }
 
 export default function Hero() {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const bgRef = useRef(null);
+  const contentRef = useRef(null);
+
+  // Lightweight parallax with raw scroll listener + transform
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (bgRef.current) bgRef.current.style.transform = `translate3d(0, ${y * 0.25}px, 0)`;
+        if (contentRef.current) {
+          contentRef.current.style.transform = `translate3d(0, ${y * 0.4}px, 0)`;
+          contentRef.current.style.opacity = Math.max(0, 1 - y / 600);
+        }
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <section id="hero" ref={containerRef} className="relative h-screen overflow-hidden" data-testid="hero-section">
-      {/* Parallax BG */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
+    <section id="hero" className="relative h-screen overflow-hidden" data-testid="hero-section">
+      {/* Parallax BG - hardware accelerated */}
+      <div ref={bgRef} className="absolute inset-0 z-0 will-change-transform">
         <img
           src={HERO_BG}
           alt="Luxury modern home"
-          className="w-full h-[120%] object-cover"
+          className="w-full h-[130%] object-cover"
           loading="eager"
         />
-        {/* Overlay */}
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(to bottom, rgba(11,11,15,0.6) 0%, rgba(11,11,15,0.5) 40%, rgba(11,11,15,0.92) 100%)'
         }} />
-      </motion.div>
+      </div>
 
-      {/* Radial lighting */}
+      {/* Radial lighting - static, no animation */}
       <div className="absolute inset-0 z-[1] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(247,230,0,0.06) 0%, transparent 50%)' }} />
 
-      {/* Floating particles */}
+      {/* CSS-only particles (no JS overhead) */}
       <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
+        {[...Array(6)].map((_, i) => (
+          <div
             key={i}
-            className="absolute rounded-full"
+            className="particle-dot"
             style={{
-              width: Math.random() * 3 + 1,
-              height: Math.random() * 3 + 1,
-              backgroundColor: 'rgba(247,230,0,0.3)',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30 - Math.random() * 50, 0],
-              opacity: [0, 0.6, 0],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 4,
-              ease: 'easeInOut',
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 3) * 25}%`,
+              animationDelay: `${i * 0.8}s`,
+              animationDuration: `${5 + i}s`,
             }}
           />
         ))}
       </div>
 
       {/* Content */}
-      <motion.div
-        className="relative z-10 h-full flex flex-col justify-end pb-20 md:pb-28 px-6 md:px-12 max-w-[1400px] mx-auto"
-        style={{ y: textY, opacity }}
+      <div
+        ref={contentRef}
+        className="relative z-10 h-full flex flex-col justify-end pb-20 md:pb-28 px-6 md:px-12 max-w-[1400px] mx-auto will-change-transform"
       >
         {/* Label */}
         <motion.span
@@ -146,18 +153,18 @@ export default function Hero() {
           <button
             data-testid="hero-cta-explore"
             onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-3.5 text-sm font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-95 glow-yellow"
-            style={{ backgroundColor: '#F7E600', color: '#000' }}
+            className="px-8 py-3.5 text-sm font-bold tracking-wider uppercase hover:scale-105 active:scale-95 glow-yellow"
+            style={{ backgroundColor: '#F7E600', color: '#000', transition: 'transform 0.2s' }}
           >
             Explore Projects
           </button>
           <button
             data-testid="hero-cta-showreel"
             onClick={() => document.querySelector('#videos')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group px-8 py-3.5 text-sm font-bold tracking-wider uppercase border transition-all duration-300 hover:border-[#F7E600] flex items-center gap-2"
-            style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#FAFAFA' }}
+            className="group px-8 py-3.5 text-sm font-bold tracking-wider uppercase border flex items-center gap-2"
+            style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#FAFAFA', transition: 'border-color 0.3s' }}
           >
-            <Play size={14} className="group-hover:text-[#F7E600] transition-colors" />
+            <Play size={14} className="group-hover:text-[#F7E600]" style={{ transition: 'color 0.3s' }} />
             Watch Showreel
           </button>
         </motion.div>
@@ -178,17 +185,13 @@ export default function Hero() {
             </div>
           ))}
         </motion.div>
-      </motion.div>
+      </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
+      {/* Scroll indicator - CSS animation only */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 animate-bounce-slow">
         <span className="text-[10px] uppercase tracking-[0.3em]" style={{ color: '#A1A1AA' }}>Scroll</span>
         <ArrowDown size={16} color="#F7E600" />
-      </motion.div>
+      </div>
     </section>
   );
 }
