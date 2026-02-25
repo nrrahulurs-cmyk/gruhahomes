@@ -1,73 +1,60 @@
-# Gruha Homes - Premium Architectural Website PRD
+# Gruha Homes - Premium Architectural Website
 
 ## Original Problem Statement
-Build a fully immersive, award-winning, premium architectural website for Gruha Homes using React + Tailwind + Framer Motion + GSAP + Lenis. Company: Gruha Homes, Residential construction company in Bengaluru. Tagline: "A Place To Call Home".
+Build a fully immersive, award-winning, premium architectural website for Gruha Homes (residential construction company in Bengaluru) using React + Tailwind + Framer Motion + GSAP + Lenis.
 
-## Architecture
-- **Frontend**: React 19 + Tailwind CSS + Framer Motion + Lenis (smooth scroll)
-- **Backend**: FastAPI + MongoDB (Motor async driver)
-- **Database**: MongoDB (contacts, newsletter collections)
-- **Styling**: Custom CSS variables, Syne + Manrope fonts, dark/light theme
+**Tagline:** "A Place To Call Home"
 
-## User Personas
-1. **Homebuyers** - Looking for premium residential construction in Bengaluru
-2. **Real Estate Investors** - Evaluating construction quality and pricing
-3. **Architecture Enthusiasts** - Exploring modern residential designs
+## Tech Stack
+- **Frontend:** React 19, Tailwind CSS, Framer Motion v12, GSAP, Lenis (smooth scroll)
+- **Backend:** FastAPI (Python)
+- **Database:** MongoDB
+- **Architecture:** SPA with REST API backend
 
-## Core Requirements (Static)
-- Single-page website with 12+ sections
-- Logo intro animation with SVG stroke draw
-- Fullscreen cinematic hero with parallax
-- Dark mode default with light/dark toggle (localStorage persistence)
-- Contact form with MongoDB storage
-- Newsletter subscription
-- YouTube video embeds
-- Google Maps integration
-- Responsive design
+## Color System
+- Primary: #F7E600, Dark BG: #0B0B0F, Surface: #14141A, Elevated: #1C1C24, Gold: #D4AF37, Light BG: #F9FAFB
 
-## What's Been Implemented (Feb 25, 2026)
-- [x] Logo intro animation (fade in, glow pulse, skip button)
-- [x] Floating glassmorphism navbar with theme toggle
-- [x] Hero section (parallax, floating particles, stat counters, CTAs)
-- [x] About section (split layout, hover zoom image, 15+ years badge)
-- [x] Services section (4 interactive 3D tilt cards)
-- [x] Projects section (masonry grid, animated category filter)
-- [x] Pricing section (3 plan cards, premium highlighted)
-- [x] Process section (6-step animated timeline)
-- [x] Team section (circular portraits with hover reveal - Anil Urs, Kiran, Prithivi)
-- [x] Videos section (3 YouTube cards with modal player)
-- [x] Testimonials section (glass cards with floating animation)
-- [x] Contact section (split layout + Google Map + floating label form)
-- [x] Footer (newsletter bar, 4-column layout, social links)
-- [x] Scroll progress indicator
-- [x] Cursor glow effect (dark mode)
-- [x] Backend: Contact form API (POST/GET /api/contact)
-- [x] Backend: Newsletter API (POST/GET /api/newsletter)
-- [x] Dark/Light theme toggle with localStorage persistence
+## Core Requirements
+- Dark mode default with light/dark toggle
+- Logo intro animation
+- Fullscreen cinematic hero with parallax and particles
+- Sections: About, Services, Projects (masonry), Pricing, Process, Team, Videos, Testimonials, Contact
+- Micro-interactions: fade-up reveals, hover lifts, glow effects, scroll progress, cursor glow
+- Contact form & newsletter stored in MongoDB
 
-## Prioritized Backlog
-### P0 (Critical) - All done
-### P1 (High)
-- Add GSAP ScrollTrigger for more cinematic scroll animations
-- Add Lottie animations for service icons
-- SEO meta tags and Open Graph
+## Implemented Features (Completed)
+- [x] All 11 sections with animations and micro-interactions
+- [x] FastAPI backend with /api/contact and /api/newsletter endpoints
+- [x] MongoDB integration for form data persistence
+- [x] Lenis smooth scrolling
+- [x] Light/dark theme toggle with localStorage
+- [x] Logo intro with skip button
+- [x] Responsive design with mobile menu
+- [x] YouTube video modal integration
+- [x] Project category filtering
 
-### P2 (Medium)
-- Blog/Articles section
-- FAQ accordion section
-- WhatsApp chat widget
-- Project detail modal/page
-- Admin dashboard for managing contacts/newsletter
+## Performance Optimization (Completed - Feb 2026)
+Fixed severe scroll lag while preserving all visual effects:
+- Replaced all Framer Motion `whileHover` with pure CSS `hover-lift-*` classes (zero JS overhead)
+- Wrapped all static section components in `React.memo` (prevents re-render cascade on theme toggle)
+- Fixed cursor glow to use `transform: translate3d()` instead of `left/top` (eliminates layout thrashing)
+- Optimized Navbar scroll listener to only update state when crossing 50px threshold
+- Added `decoding="async"` to all lazy-loaded images (off-main-thread decoding)
+- CSS-only particles and bounce animations (no JS overhead)
+- `content-visibility: auto` for below-fold sections
+- rAF-throttled scroll listeners throughout
 
-### P3 (Nice to have)
-- 3D model viewer for projects
-- Virtual tour integration
-- Progressive Web App (PWA)
-- Multi-language support (Kannada/English)
+## DB Schema
+- **contacts:** { name, email, phone?, service?, message, created_at }
+- **newsletter_subscriptions:** { email, created_at }
 
-## Next Tasks
-1. Add GSAP ScrollTrigger animations for more cinematic reveals
-2. SEO optimization with meta tags
-3. WhatsApp chat widget integration
-4. Project detail pages with image galleries
-5. Admin panel for contact/newsletter management
+## API Endpoints
+- `POST /api/contact` - Submit contact form
+- `POST /api/newsletter` - Subscribe to newsletter
+- `GET /api/contacts` - List contacts
+- `GET /api/newsletter` - List subscriptions
+
+## Backlog
+- P1: Image optimization (WebP, responsive srcset)
+- P1: Mobile performance tuning
+- P2: Lazy-load below-fold sections with React.lazy/Suspense
