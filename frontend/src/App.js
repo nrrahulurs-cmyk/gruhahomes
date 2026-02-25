@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import "@/App.css";
 import Lenis from 'lenis';
 import LogoIntro from '@/components/LogoIntro';
@@ -20,22 +20,28 @@ function App() {
   const [introComplete, setIntroComplete] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('gruha-theme') || 'dark');
   const cursorRef = useRef(null);
+  const rafId = useRef(null);
 
   // Lenis smooth scroll
   useEffect(() => {
     if (!introComplete) return;
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
     });
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId.current = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
-    return () => lenis.destroy();
+    rafId.current = requestAnimationFrame(raf);
+    return () => {
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+      lenis.destroy();
+    };
   }, [introComplete]);
 
   // Theme toggle
@@ -44,35 +50,38 @@ function App() {
     localStorage.setItem('gruha-theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  const toggleTheme = useCallback(() => setTheme(prev => prev === 'dark' ? 'light' : 'dark'), []);
 
-  // Cursor glow
+  // Cursor glow - throttled with rAF
   useEffect(() => {
     const cursor = cursorRef.current;
     if (!cursor) return;
+    let mx = 0, my = 0, ticking = false;
     const move = (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+      mx = e.clientX;
+      my = e.clientY;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          cursor.style.left = mx + 'px';
+          cursor.style.top = my + 'px';
+          ticking = false;
+        });
+      }
     };
-    window.addEventListener('mousemove', move);
+    window.addEventListener('mousemove', move, { passive: true });
     return () => window.removeEventListener('mousemove', move);
   }, []);
 
   return (
     <div className="app-root" data-testid="app-root" data-theme={theme}>
-      {/* Logo intro */}
       {!introComplete && <LogoIntro onComplete={() => setIntroComplete(true)} />}
 
-      {/* Cursor glow (dark mode only) */}
-      <div ref={cursorRef} className="cursor-glow hidden md:block" />
+      {theme === 'dark' && <div ref={cursorRef} className="cursor-glow hidden md:block" />}
 
-      {/* Scroll progress */}
       {introComplete && <ScrollProgress />}
-
-      {/* Navigation */}
       {introComplete && <Navbar theme={theme} toggleTheme={toggleTheme} />}
 
-      {/* Main content */}
       {introComplete && (
         <main>
           <Hero />
