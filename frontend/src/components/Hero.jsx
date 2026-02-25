@@ -61,7 +61,7 @@ export default function Hero() {
         />
         {/* Overlay */}
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(to bottom, rgba(11,11,15,0.4) 0%, rgba(11,11,15,0.2) 40%, rgba(11,11,15,0.8) 100%)'
+          background: 'linear-gradient(to bottom, rgba(11,11,15,0.6) 0%, rgba(11,11,15,0.5) 40%, rgba(11,11,15,0.92) 100%)'
         }} />
       </motion.div>
 
