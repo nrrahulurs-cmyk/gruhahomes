@@ -94,6 +94,13 @@ body.light-theme section[style*="backgroundColor: var(--gruha-surface)"] {
 /* Ensure proper stacking */
 section {
   position: relative;
+  contain: layout style;
+}
+
+/* Offscreen paint optimization */
+#services, #projects, #pricing, #process, #team, #videos, #testimonials, #contact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
 }
 
 /* Link underline animation */
