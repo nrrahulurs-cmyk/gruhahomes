@@ -17,6 +17,7 @@ const navLinks = [
 export default function Navbar({ theme, toggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const scrolledRef = useRef(false);
 
   useEffect(() => {
     let ticking = false;
@@ -24,7 +25,11 @@ export default function Navbar({ theme, toggleTheme }) {
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 50);
+          const isScrolled = window.scrollY > 50;
+          if (isScrolled !== scrolledRef.current) {
+            scrolledRef.current = isScrolled;
+            setScrolled(isScrolled);
+          }
           ticking = false;
         });
       }
