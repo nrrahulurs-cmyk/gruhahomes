@@ -49,13 +49,14 @@ export default function Navbar({ theme, toggleTheme }) {
       {/* Main nav */}
       <motion.nav
         data-testid="main-navbar"
-        className={`fixed left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'top-0' : 'top-8'}`}
+        className={`fixed left-0 right-0 z-50 ${scrolled ? 'top-0' : 'top-8'}`}
+        style={{ transition: 'top 0.5s ease' }}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-        <div className={`mx-4 md:mx-8 rounded-none ${scrolled ? 'md:mx-0 md:rounded-none' : 'md:rounded-full'} transition-all duration-500 ${scrolled ? 'glass shadow-lg' : ''}`}
-          style={scrolled ? {} : { backgroundColor: 'transparent' }}>
+        <div className={`mx-4 md:mx-8 rounded-none ${scrolled ? 'md:mx-0 md:rounded-none' : 'md:rounded-full'} ${scrolled ? 'glass shadow-lg' : ''}`}
+          style={scrolled ? { transition: 'background-color 0.5s, border-radius 0.5s' } : { backgroundColor: 'transparent', transition: 'background-color 0.5s, border-radius 0.5s' }}>
           <div className="max-w-[1400px] mx-auto px-6 py-3 flex items-center justify-between">
             {/* Logo */}
             <a href="#hero" onClick={(e) => { e.preventDefault(); scrollTo('#hero'); }} data-testid="nav-logo">
